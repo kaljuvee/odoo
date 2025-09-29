@@ -26,19 +26,36 @@ Follow these steps to set up the Odoo environment and install the custom helpdes
 *   Python 3.11
 *   Git
 
-### 1. Install PostgreSQL
+### 1. Database Setup
+
+This project supports both local and remote PostgreSQL databases.
+
+#### Option A: Remote PostgreSQL (Recommended for Production)
+
+If you have a remote PostgreSQL database (like Render, AWS RDS, etc.), update the `odoo.conf` file with your database credentials:
+
+```bash
+# Edit odoo.conf with your database details
+db_host = your-postgres-host.com
+db_port = 5432
+db_user = your_username
+db_password = your_password
+```
+
+Then run the database setup script:
+
+```bash
+python3 setup_database.py
+```
+
+#### Option B: Local PostgreSQL (Development)
 
 ```bash
 sudo apt update
-sudo apt install -y postgresql
+sudo apt install -y postgresql postgresql-contrib
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
-```
-
-### 2. Create a PostgreSQL User for Odoo
-
-```bash
-sudo su - postgres -c "createuser -s odoo"
+sudo su - postgres -c "createuser -s $USER"
 ```
 
 ### 3. Clone the Odoo Repository
@@ -69,11 +86,12 @@ sudo apt install -y wkhtmltopdf postgresql postgresql-contrib
 
 ### 6. Initialize the Odoo Database
 
-Create the database and initialize it with the base Odoo modules and the custom helpdesk module:
+Copy the custom helpdesk module and initialize the database:
 
 ```bash
-createdb odoo_helpdesk
-python3 odoo-bin --addons-path=addons -d odoo_helpdesk --init=custom_helpdesk --stop-after-init
+cp -r custom_helpdesk odoo/addons/
+cd odoo
+python3 odoo-bin -c ../odoo.conf --init=custom_helpdesk --stop-after-init
 ```
 
 ### 7. Start the Odoo Server
@@ -81,7 +99,7 @@ python3 odoo-bin --addons-path=addons -d odoo_helpdesk --init=custom_helpdesk --
 Run the following command to start the Odoo server:
 
 ```bash
-python3 odoo-bin --addons-path=addons -d odoo_helpdesk
+python3 odoo-bin -c ../odoo.conf
 ```
 
 The server will be accessible at `http://localhost:8069`.
