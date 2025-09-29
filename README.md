@@ -170,6 +170,25 @@ To push this project to your GitHub repository, follow these steps:
 
     You will be prompted for your GitHub username and password (or a personal access token).
 
+## 🚀 Quick Deploy on Render
+
+For instant deployment on Render:
+
+1. **Fork this repository** to your GitHub account
+2. **Connect to Render** and create a new Web Service
+3. **Set Environment Variables**:
+   ```
+   DB_HOST=your-postgres-host
+   DB_USER=your-username
+   DB_PASSWORD=your-password
+   DB_NAME=odoo_helpdesk
+   ```
+4. **Deploy** with these settings:
+   - **Build Command**: `./build.sh`
+   - **Start Command**: `./start.sh`
+
+See [README_RENDER.md](README_RENDER.md) for detailed deployment instructions.
+
 ## License
 
 This project is licensed under the LGPL-3 License. See the `LICENSE` file for more details.

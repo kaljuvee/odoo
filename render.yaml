@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: odoo-helpdesk
+    runtime: python3
+    buildCommand: "./build.sh"
+    startCommand: "./start.sh"
+    plan: starter
+    healthCheckPath: /web/health
+    envVars:
+      - key: DB_HOST
+        value: dpg-d2ebacvdiees73flvqhg-a.frankfurt-postgres.render.com
+      - key: DB_PORT
+        value: 5432
+      - key: DB_USER
+        value: mmg_golive_user
+      - key: DB_PASSWORD
+        value: 8djDD6dvpudjEoTN9Pga7f3YyTpbeEvC
+      - key: DB_NAME
+        value: odoo_helpdesk
+      - key: PYTHONUNBUFFERED
+        value: 1
