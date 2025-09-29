@@ -16,11 +16,11 @@ This project provides a complete helpdesk solution built on Odoo Community Editi
 - **Email notifications**
 - **Demo data for testing**
 
-### 2. Installation Script (`install.sh`)
-- **Automated installation process**
-- **Dependency management**
-- **Database setup**
-- **Module initialization**
+### 2. Python Requirements (`requirements.txt`)
+- **Complete dependency specification**
+- **Version-pinned packages**
+- **Compatible with Odoo 17.0**
+- **Easy pip installation**
 
 ### 3. Documentation (`README.md`)
 - **Step-by-step installation guide**
@@ -86,18 +86,27 @@ This project provides a complete helpdesk solution built on Odoo Community Editi
    cd odoo
    ```
 
-2. **Run the installation script:**
+2. **Install dependencies:**
    ```bash
-   ./install.sh
+   pip3 install -r requirements.txt
+   sudo apt install -y wkhtmltopdf postgresql postgresql-contrib
    ```
 
-3. **Start the Odoo server:**
+3. **Set up Odoo:**
    ```bash
+   git clone https://github.com/odoo/odoo.git --depth 1 --branch 17.0
+   cp -r custom_helpdesk odoo/addons/
+   createdb odoo_helpdesk
    cd odoo
+   python3 odoo-bin --addons-path=addons -d odoo_helpdesk --init=custom_helpdesk --stop-after-init
+   ```
+
+4. **Start the server:**
+   ```bash
    python3 odoo-bin --addons-path=addons -d odoo_helpdesk
    ```
 
-4. **Access the application:**
+5. **Access the application:**
    - Open browser to `http://localhost:8069`
    - Login with `admin` / `admin`
    - Navigate to the Helpdesk menu

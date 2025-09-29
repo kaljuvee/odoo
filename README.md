@@ -50,21 +50,24 @@ git clone https://github.com/kaljuvee/odoo.git /home/ubuntu/odoo-setup/odoo
 cd /home/ubuntu/odoo-setup/odoo
 ```
 
-### 4. Install Dependencies
+### 4. Install Python Dependencies
 
-Install the required Python packages for Odoo:
+Install the required Python packages using the requirements file:
 
 ```bash
 pip3 install -r requirements.txt
 ```
 
-Install `wkhtmltopdf` for printing PDF reports:
+### 5. Install System Dependencies
+
+Install `wkhtmltopdf` for PDF generation and PostgreSQL development headers:
 
 ```bash
-sudo apt install -y wkhtmltopdf
+sudo apt update
+sudo apt install -y wkhtmltopdf postgresql postgresql-contrib
 ```
 
-### 5. Initialize the Odoo Database
+### 6. Initialize the Odoo Database
 
 Create the database and initialize it with the base Odoo modules and the custom helpdesk module:
 
@@ -73,7 +76,7 @@ createdb odoo_helpdesk
 python3 odoo-bin --addons-path=addons -d odoo_helpdesk --init=custom_helpdesk --stop-after-init
 ```
 
-### 6. Start the Odoo Server
+### 7. Start the Odoo Server
 
 Run the following command to start the Odoo server:
 
