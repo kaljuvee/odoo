@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo Customers -->
+        <record id="demo_customer_1" model="res.partner">
+            <field name="name">John Smith</field>
+            <field name="email">john.smith@example.com</field>
+            <field name="phone">+1-555-0123</field>
+            <field name="is_company">False</field>
+        </record>
+
+        <record id="demo_customer_2" model="res.partner">
+            <field name="name">Sarah Johnson</field>
+            <field name="email">sarah.johnson@example.com</field>
+            <field name="phone">+1-555-0456</field>
+            <field name="is_company">False</field>
+        </record>
+
+        <record id="demo_company_1" model="res.partner">
+            <field name="name">Tech Solutions Inc.</field>
+            <field name="email">support@techsolutions.com</field>
+            <field name="phone">+1-555-0789</field>
+            <field name="is_company">True</field>
+        </record>
+
+        <!-- Demo Tickets -->
+        <record id="demo_ticket_1" model="helpdesk.ticket">
+            <field name="name">Login Issues with Mobile App</field>
+            <field name="description">
+                <![CDATA[
+                <p>I'm having trouble logging into the mobile app. The app keeps showing "Invalid credentials" even though I'm using the correct username and password that works on the website.</p>
+                <p>Steps I've tried:</p>
+                <ul>
+                    <li>Cleared app cache</li>
+                    <li>Reinstalled the app</li>
+                    <li>Reset password</li>
+                </ul>
+                <p>Device: iPhone 12, iOS 15.6</p>
+                ]]>
+            </field>
+            <field name="partner_id" ref="demo_customer_1"/>
+            <field name="team_id" ref="team_support"/>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="priority">2</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_bug')])]"/>
+        </record>
+
+        <record id="demo_ticket_2" model="helpdesk.ticket">
+            <field name="name">Feature Request: Dark Mode</field>
+            <field name="description">
+                <![CDATA[
+                <p>Would it be possible to add a dark mode option to the application? Many users prefer dark themes, especially when working in low-light environments.</p>
+                <p>This would be a great addition to improve user experience and reduce eye strain during extended usage.</p>
+                ]]>
+            </field>
+            <field name="partner_id" ref="demo_customer_2"/>
+            <field name="team_id" ref="team_support"/>
+            <field name="stage_id" ref="stage_in_progress"/>
+            <field name="priority">1</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_feature_request')])]"/>
+        </record>
+
+        <record id="demo_ticket_3" model="helpdesk.ticket">
+            <field name="name">Billing Question - Invoice #INV-2023-001</field>
+            <field name="description">
+                <![CDATA[
+                <p>I have a question about invoice #INV-2023-001. The amount seems higher than expected based on our agreement.</p>
+                <p>Could someone please review this and explain the charges?</p>
+                <p>Thank you!</p>
+                ]]>
+            </field>
+            <field name="partner_id" ref="demo_company_1"/>
+            <field name="team_id" ref="team_support"/>
+            <field name="stage_id" ref="stage_waiting"/>
+            <field name="priority">1</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_question')])]"/>
+        </record>
+
+        <record id="demo_ticket_4" model="helpdesk.ticket">
+            <field name="name">System Performance Issues</field>
+            <field name="description">
+                <![CDATA[
+                <p><strong>URGENT:</strong> Our production system is experiencing severe performance issues since the last update.</p>
+                <p>Issues observed:</p>
+                <ul>
+                    <li>Page load times increased by 300%</li>
+                    <li>Database queries timing out</li>
+                    <li>Users unable to complete transactions</li>
+                </ul>
+                <p>This is affecting our business operations. Please prioritize this issue.</p>
+                ]]>
+            </field>
+            <field name="partner_id" ref="demo_company_1"/>
+            <field name="team_id" ref="team_support"/>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="priority">3</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_bug'), ref('tag_urgent')])]"/>
+        </record>
+
+        <record id="demo_ticket_5" model="helpdesk.ticket">
+            <field name="name">Password Reset Not Working</field>
+            <field name="description">
+                <![CDATA[
+                <p>I've been trying to reset my password but I'm not receiving the reset email. I've checked my spam folder and tried multiple times.</p>
+                <p>My email address is correct in the system. Could you please help me reset my password manually?</p>
+                ]]>
+            </field>
+            <field name="partner_id" ref="demo_customer_1"/>
+            <field name="team_id" ref="team_support"/>
+            <field name="stage_id" ref="stage_solved"/>
+            <field name="priority">1</field>
+            <field name="tag_ids" eval="[(6, 0, [ref('tag_question')])]"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Portal My Account Menu -->
+        <template id="portal_my_home_menu_helpdesk" name="Portal layout : helpdesk menu entries" inherit_id="portal.portal_breadcrumbs" priority="40">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+                <li t-if="page_name == 'ticket' or ticket" t-attf-class="breadcrumb-item #{'active ' if not ticket else ''}">
+                    <a t-if="ticket" t-attf-href="/my/tickets?{{ keep_query() }}">Tickets</a>
+                    <t t-else="">Tickets</t>
+                </li>
+                <li t-if="ticket" class="breadcrumb-item active">
+                    <t t-esc="ticket.name"/>
+                </li>
+            </xpath>
+        </template>
+
+        <!-- Portal My Account -->
+        <template id="portal_my_home_helpdesk" name="Portal My Home : helpdesk entries" inherit_id="portal.portal_my_home" priority="40">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Tickets</t>
+                    <t t-set="url" t-value="'/my/tickets'"/>
+                    <t t-set="placeholder_count" t-value="'ticket_count'"/>
+                </t>
+            </xpath>
+        </template>
+
+        <!-- Portal Tickets List -->
+        <template id="portal_my_tickets" name="My Tickets">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Tickets</t>
+                </t>
+                <t t-if="not tickets">
+                    <div class="alert alert-warning mt8" role="alert">
+                        There are no tickets.
+                    </div>
+                </t>
+                <t t-if="tickets" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Ticket #</th>
+                            <th>Subject</th>
+                            <th>Stage</th>
+                            <th>Priority</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="tickets" t-as="ticket">
+                            <tr>
+                                <td>
+                                    <a t-attf-href="/my/tickets/#{ticket.id}?{{ keep_query() }}">
+                                        <t t-esc="ticket.id"/>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a t-attf-href="/my/tickets/#{ticket.id}?{{ keep_query() }}">
+                                        <t t-esc="ticket.name"/>
+                                    </a>
+                                </td>
+                                <td>
+                                    <span t-field="ticket.stage_id"/>
+                                </td>
+                                <td>
+                                    <span t-if="ticket.priority == '0'" class="badge badge-secondary">Low</span>
+                                    <span t-if="ticket.priority == '1'" class="badge badge-info">Normal</span>
+                                    <span t-if="ticket.priority == '2'" class="badge badge-warning">High</span>
+                                    <span t-if="ticket.priority == '3'" class="badge badge-danger">Urgent</span>
+                                </td>
+                                <td>
+                                    <span t-field="ticket.create_date" t-options="{'widget': 'date'}"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </template>
+
+        <!-- Portal Ticket Detail -->
+        <template id="portal_my_ticket" name="My Ticket">
+            <t t-call="portal.portal_layout">
+                <t t-call="portal.portal_record_layout">
+                    <t t-set="card_header">
+                        <div class="row no-gutters">
+                            <div class="col-12">
+                                <h5 class="d-flex mb-1 mb-md-0">
+                                    <span t-field="ticket.name"/>
+                                    <small class="ml-auto">
+                                        <span t-field="ticket.stage_id" class="badge badge-pill badge-info"/>
+                                    </small>
+                                </h5>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-set="card_body">
+                        <div class="row mb-4">
+                            <div class="col-12 col-md-6">
+                                <strong>Customer:</strong> <span t-field="ticket.partner_id"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Team:</strong> <span t-field="ticket.team_id"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Assigned To:</strong> <span t-field="ticket.user_id"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Priority:</strong>
+                                <span t-if="ticket.priority == '0'" class="badge badge-secondary">Low</span>
+                                <span t-if="ticket.priority == '1'" class="badge badge-info">Normal</span>
+                                <span t-if="ticket.priority == '2'" class="badge badge-warning">High</span>
+                                <span t-if="ticket.priority == '3'" class="badge badge-danger">Urgent</span>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Created:</strong> <span t-field="ticket.create_date" t-options="{'widget': 'datetime'}"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <strong>Tags:</strong>
+                                <t t-foreach="ticket.tag_ids" t-as="tag">
+                                    <span class="badge badge-secondary mr-1" t-esc="tag.name"/>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row" t-if="ticket.description">
+                            <div class="col-12">
+                                <strong>Description:</strong>
+                                <div t-field="ticket.description"/>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+                <div class="o_portal_chatter">
+                    <t t-call="portal.message_thread">
+                        <t t-set="object" t-value="ticket"/>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

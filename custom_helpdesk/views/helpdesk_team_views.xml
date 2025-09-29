@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Team Tree View -->
+        <record id="helpdesk_team_view_tree" model="ir.ui.view">
+            <field name="name">helpdesk.team.tree</field>
+            <field name="model">helpdesk.team</field>
+            <field name="arch" type="xml">
+                <tree string="Teams">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="member_ids" widget="many2many_tags"/>
+                    <field name="ticket_count"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Team Form View -->
+        <record id="helpdesk_team_view_form" model="ir.ui.view">
+            <field name="name">helpdesk.team.form</field>
+            <field name="model">helpdesk.team</field>
+            <field name="arch" type="xml">
+                <form string="Team">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="action" name="%(helpdesk_ticket_action)d" 
+                                    context="{'search_default_team_id': active_id}" icon="fa-ticket">
+                                <field string="Tickets" name="ticket_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Team Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="sequence"/>
+                                <field name="active"/>
+                            </group>
+                            <group>
+                                <field name="color" widget="color"/>
+                            </group>
+                        </group>
+                        <group string="Team Members">
+                            <field name="member_ids" nolabel="1" widget="many2many_tags"/>
+                        </group>
+                        <group string="Description">
+                            <field name="description" nolabel="1" placeholder="Team description..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Team Kanban View -->
+        <record id="helpdesk_team_view_kanban" model="ir.ui.view">
+            <field name="name">helpdesk.team.kanban</field>
+            <field name="model">helpdesk.team</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="member_ids"/>
+                    <field name="ticket_count"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <div class="text-muted">
+                                            <t t-esc="record.ticket_count.value"/> tickets
+                                        </div>
+                                        <field name="member_ids" widget="many2many_tags"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Team Actions -->
+        <record id="helpdesk_team_action" model="ir.actions.act_window">
+            <field name="name">Teams</field>
+            <field name="res_model">helpdesk.team</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first helpdesk team
+                </p>
+                <p>
+                    Organize your support staff into teams for better ticket management.
+                </p>
+            </field>
+        </record>
+
+        <!-- Stage Tree View -->
+        <record id="helpdesk_stage_view_tree" model="ir.ui.view">
+            <field name="name">helpdesk.stage.tree</field>
+            <field name="model">helpdesk.stage</field>
+            <field name="arch" type="xml">
+                <tree string="Stages" editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="is_default"/>
+                    <field name="is_closed"/>
+                    <field name="fold"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Stage Form View -->
+        <record id="helpdesk_stage_view_form" model="ir.ui.view">
+            <field name="name">helpdesk.stage.form</field>
+            <field name="model">helpdesk.stage</field>
+            <field name="arch" type="xml">
+                <form string="Stage">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="sequence"/>
+                                <field name="active"/>
+                            </group>
+                            <group>
+                                <field name="is_default"/>
+                                <field name="is_closed"/>
+                                <field name="fold"/>
+                            </group>
+                        </group>
+                        <group string="Description">
+                            <field name="description" nolabel="1" placeholder="Stage description..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Stage Actions -->
+        <record id="helpdesk_stage_action" model="ir.actions.act_window">
+            <field name="name">Stages</field>
+            <field name="res_model">helpdesk.stage</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Tag Tree View -->
+        <record id="helpdesk_tag_view_tree" model="ir.ui.view">
+            <field name="name">helpdesk.tag.tree</field>
+            <field name="model">helpdesk.tag</field>
+            <field name="arch" type="xml">
+                <tree string="Tags" editable="bottom">
+                    <field name="name"/>
+                    <field name="color" widget="color"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Tag Actions -->
+        <record id="helpdesk_tag_action" model="ir.actions.act_window">
+            <field name="name">Tags</field>
+            <field name="res_model">helpdesk.tag</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+    </data>
+</odoo>

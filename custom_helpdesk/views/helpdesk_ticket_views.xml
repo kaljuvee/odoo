@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Ticket Tree View -->
+        <record id="helpdesk_ticket_view_tree" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.tree</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Tickets" decoration-danger="priority=='3'" decoration-warning="priority=='2'">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="team_id"/>
+                    <field name="user_id"/>
+                    <field name="stage_id"/>
+                    <field name="priority" widget="priority"/>
+                    <field name="create_date"/>
+                    <field name="activity_ids" widget="list_activity"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Ticket Form View -->
+        <record id="helpdesk_ticket_view_form" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.form</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <form string="Ticket">
+                    <header>
+                        <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>
+                        <button name="action_assign_to_me" string="Assign to Me" type="object" 
+                                class="btn-primary" invisible="user_id == uid"/>
+                        <button name="action_close_ticket" string="Close Ticket" type="object" 
+                                class="btn-secondary" invisible="stage_id.is_closed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <widget name="web_ribbon" title="Closed" bg_color="bg-danger" 
+                                invisible="not stage_id.is_closed"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Ticket Subject"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" options="{'no_create': True}"/>
+                                <field name="partner_email"/>
+                                <field name="team_id"/>
+                                <field name="user_id" options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="priority" widget="priority"/>
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description" placeholder="Describe the issue in detail..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Ticket Kanban View -->
+        <record id="helpdesk_ticket_view_kanban" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.kanban</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                    <field name="stage_id"/>
+                    <field name="color"/>
+                    <field name="priority"/>
+                    <field name="tag_ids"/>
+                    <field name="user_id"/>
+                    <field name="partner_id"/>
+                    <field name="kanban_state"/>
+                    <field name="activity_ids"/>
+                    <field name="activity_state"/>
+                    <progressbar field="kanban_state" colors='{"done": "success", "blocked": "danger"}'/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                        <a role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                                        <div class="dropdown-divider"/>
+                                        <div class="dropdown-item-text text-muted">Kanban State</div>
+                                        <a role="menuitem" class="dropdown-item" name="action_set_kanban_state_normal">In Progress</a>
+                                        <a role="menuitem" class="dropdown-item" name="action_set_kanban_state_done">Ready</a>
+                                        <a role="menuitem" class="dropdown-item" name="action_set_kanban_state_blocked">Blocked</a>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                        </div>
+                                        <div class="o_kanban_record_top_right">
+                                            <field name="priority" widget="priority"/>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                        <div class="text-muted">
+                                            <field name="partner_id"/>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="activity_ids" widget="kanban_activity"/>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <img t-att-src="kanban_image('res.users', 'avatar_128', record.user_id.raw_value)" 
+                                                 t-att-title="record.user_id.value" t-att-alt="record.user_id.value" 
+                                                 class="oe_kanban_avatar"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Ticket Search View -->
+        <record id="helpdesk_ticket_view_search" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.search</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <search string="Search Tickets">
+                    <field name="name" string="Subject"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="user_id" string="Assigned To"/>
+                    <field name="team_id" string="Team"/>
+                    <field name="tag_ids" string="Tags"/>
+                    <separator/>
+                    <filter string="My Tickets" name="my_tickets" domain="[('user_id', '=', uid)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <filter string="Open" name="open" domain="[('stage_id.is_closed', '=', False)]"/>
+                    <filter string="Closed" name="closed" domain="[('stage_id.is_closed', '=', True)]"/>
+                    <separator/>
+                    <filter string="High Priority" name="high_priority" domain="[('priority', 'in', ['2', '3'])]"/>
+                    <filter string="Urgent" name="urgent" domain="[('priority', '=', '3')]"/>
+                    <separator/>
+                    <filter string="Created Today" name="today" domain="[('create_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                    <filter string="Created This Week" name="week" domain="[('create_date', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Stage" name="group_stage" context="{'group_by': 'stage_id'}"/>
+                        <filter string="Team" name="group_team" context="{'group_by': 'team_id'}"/>
+                        <filter string="Assigned To" name="group_user" context="{'group_by': 'user_id'}"/>
+                        <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Priority" name="group_priority" context="{'group_by': 'priority'}"/>
+                        <filter string="Creation Date" name="group_create_date" context="{'group_by': 'create_date:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Ticket Actions -->
+        <record id="helpdesk_ticket_action" model="ir.actions.act_window">
+            <field name="name">Tickets</field>
+            <field name="res_model">helpdesk.ticket</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_open': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first helpdesk ticket
+                </p>
+                <p>
+                    Track and manage customer support requests efficiently.
+                </p>
+            </field>
+        </record>
+
+        <record id="helpdesk_ticket_action_my" model="ir.actions.act_window">
+            <field name="name">My Tickets</field>
+            <field name="res_model">helpdesk.ticket</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_my_tickets': 1, 'search_default_open': 1}</field>
+            <field name="domain">[('user_id', '=', uid)]</field>
+        </record>
+
+    </data>
+</odoo>

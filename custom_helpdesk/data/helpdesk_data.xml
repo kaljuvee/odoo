@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Default Stages -->
+        <record id="stage_new" model="helpdesk.stage">
+            <field name="name">New</field>
+            <field name="sequence">1</field>
+            <field name="is_default">True</field>
+            <field name="description">New tickets that need to be reviewed</field>
+        </record>
+
+        <record id="stage_in_progress" model="helpdesk.stage">
+            <field name="name">In Progress</field>
+            <field name="sequence">2</field>
+            <field name="description">Tickets currently being worked on</field>
+        </record>
+
+        <record id="stage_waiting" model="helpdesk.stage">
+            <field name="name">Waiting for Customer</field>
+            <field name="sequence">3</field>
+            <field name="description">Waiting for customer response</field>
+        </record>
+
+        <record id="stage_solved" model="helpdesk.stage">
+            <field name="name">Solved</field>
+            <field name="sequence">4</field>
+            <field name="is_closed">True</field>
+            <field name="description">Tickets that have been resolved</field>
+        </record>
+
+        <record id="stage_cancelled" model="helpdesk.stage">
+            <field name="name">Cancelled</field>
+            <field name="sequence">5</field>
+            <field name="is_closed">True</field>
+            <field name="fold">True</field>
+            <field name="description">Cancelled tickets</field>
+        </record>
+
+        <!-- Default Tags -->
+        <record id="tag_bug" model="helpdesk.tag">
+            <field name="name">Bug</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="tag_feature_request" model="helpdesk.tag">
+            <field name="name">Feature Request</field>
+            <field name="color">2</field>
+        </record>
+
+        <record id="tag_question" model="helpdesk.tag">
+            <field name="name">Question</field>
+            <field name="color">3</field>
+        </record>
+
+        <record id="tag_urgent" model="helpdesk.tag">
+            <field name="name">Urgent</field>
+            <field name="color">9</field>
+        </record>
+
+        <!-- Default Team -->
+        <record id="team_support" model="helpdesk.team">
+            <field name="name">Support Team</field>
+            <field name="description">General customer support team</field>
+            <field name="sequence">1</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Main Helpdesk Menu -->
+        <menuitem id="helpdesk_main_menu" 
+                  name="Helpdesk" 
+                  sequence="50" 
+                  web_icon="custom_helpdesk,static/description/icon.png"/>
+
+        <!-- Tickets Menu -->
+        <menuitem id="helpdesk_tickets_menu" 
+                  name="Tickets" 
+                  parent="helpdesk_main_menu" 
+                  sequence="10"/>
+
+        <menuitem id="helpdesk_tickets_all_menu" 
+                  name="All Tickets" 
+                  parent="helpdesk_tickets_menu" 
+                  action="helpdesk_ticket_action" 
+                  sequence="10"/>
+
+        <menuitem id="helpdesk_tickets_my_menu" 
+                  name="My Tickets" 
+                  parent="helpdesk_tickets_menu" 
+                  action="helpdesk_ticket_action_my" 
+                  sequence="20"/>
+
+        <!-- Configuration Menu -->
+        <menuitem id="helpdesk_config_menu" 
+                  name="Configuration" 
+                  parent="helpdesk_main_menu" 
+                  sequence="90" 
+                  groups="group_helpdesk_manager"/>
+
+        <menuitem id="helpdesk_teams_menu" 
+                  name="Teams" 
+                  parent="helpdesk_config_menu" 
+                  action="helpdesk_team_action" 
+                  sequence="10"/>
+
+        <menuitem id="helpdesk_stages_menu" 
+                  name="Stages" 
+                  parent="helpdesk_config_menu" 
+                  action="helpdesk_stage_action" 
+                  sequence="20"/>
+
+        <menuitem id="helpdesk_tags_menu" 
+                  name="Tags" 
+                  parent="helpdesk_config_menu" 
+                  action="helpdesk_tag_action" 
+                  sequence="30"/>
+
+    </data>
+</odoo>
