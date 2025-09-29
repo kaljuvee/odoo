@@ -144,7 +144,7 @@ To push this project to your GitHub repository, follow these steps:
 5.  **Push to the repository:**
 
     ```bash
-    git push -u origin master
+    git push -u origin main
     ```
 
     You will be prompted for your GitHub username and password (or a personal access token).
